@@ -3,268 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Notes</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#3498db">
-    
+    <title>did will skip</title>
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter for a clean look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Link to manifest.json for PWA features -->
+    <link rel="manifest" href="/manifest.json">
+
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Align items to the top */
             min-height: 100vh;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            transition: background-color 0.3s ease;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        
         .container {
-            background-color: #34495e;
+            background-color: #ffffff;
+            border-radius: 16px; /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Softer shadow */
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            width: 90%;
-            max-width: 500px;
-            box-sizing: border-box;
-        }
-        
-        h1 {
-            color: #ecf0f1;
-            margin-bottom: 25px;
-        }
-        
-        input[type="password"],
-        textarea {
-            width: calc(100% - 20px);
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #7f8c8d;
-            border-radius: 5px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-        
-        input[type="password"]::placeholder,
-        textarea::placeholder {
-            color: #bdc3c7;
-        }
-
-        button {
-            background-color: #3498db;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.2s ease;
-            margin: 5px;
-        }
-        
-        button:hover {
-            background-color: #2980b9;
-        }
-        
-        #password-protection,
-        #notes-app {
-            display: none; /* Hidden by default */
-        }
-        
-        #notes-app.active,
-        #password-protection.active {
-            display: block;
-        }
-
-        .error-message {
-            color: #e74c3c;
-            margin-top: -10px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-        }
-
-        textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .button-group {
+            width: 100%;
+            max-width: 600px; /* Max width for better readability on large screens */
             display: flex;
-            justify-content: space-around;
-            margin-top: 15px;
+            flex-direction: column;
+            gap: 30px; /* Space between sections */
         }
-        
-        @media (max-width: 600px) {
+        .section-title {
+            font-weight: 700; /* Bold title */
+            color: #2c3e50; /* Darker text for titles */
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .announcement-box {
+            background-color: #e0f2fe; /* Light blue for announcement */
+            border-left: 6px solid #2196f3; /* Blue border on the left */
+            padding: 20px;
+            border-radius: 8px;
+            color: #1a202c;
+        }
+        .skipper-log-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0; /* Light gray separator */
+        }
+        .skipper-log-item:last-child {
+            border-bottom: none;
+        }
+        .skipper-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .skipper-status-yes {
+            color: #ef4444; /* Red for 'Yes' (skipped) */
+            font-weight: 600;
+        }
+        .skipper-status-no {
+            color: #22c55e; /* Green for 'No' (didn't skip) */
+            font-weight: 600;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
             .container {
                 padding: 20px;
             }
-            button {
-                padding: 10px 20px;
-                font-size: 0.9rem;
+            .section-title {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="password-protection" class="active">
-            <h1>Secure Notes Login</h1>
-            <input type="password" id="password-input" placeholder="Enter password">
-            <p id="password-error" class="error-message"></p>
-            <button id="login-button">Login</button>
+        <h1 class="text-3xl section-title">Team Hub</h1>
+
+        <!-- Announcement Box Section -->
+        <div>
+            <h2 class="text-2xl section-title">Announcements</h2>
+            <div id="announcement-content" class="announcement-box">
+                <!-- Announcement content will be loaded here by JavaScript -->
+            </div>
         </div>
 
-        <div id="notes-app">
-            <h1>Your Secure Notes</h1>
-            <textarea id="notes-textarea" placeholder="Write your secret notes here..."></textarea>
-            <div class="button-group">
-                <button id="save-button">Save Notes</button>
-                <button id="clear-button">Clear Notes</button>
-                <button id="logout-button">Logout</button>
+        <!-- Skipper Logs Section -->
+        <div>
+            <h2 class="text-2xl section-title">Skipper Logs</h2>
+            <div id="skipper-logs-list" class="bg-gray-50 p-4 rounded-lg">
+                <!-- Skipper logs will be loaded here by JavaScript -->
             </div>
-            <p id="save-status" style="font-size: 0.8em; margin-top: 10px; color: #2ecc71;"></p>
         </div>
     </div>
 
     <script>
-        const correctPassword = "mynotespassword"; // CHANGE THIS TO YOUR DESIRED PASSWORD!
-        const cookieName = "secureNotesContent";
-        const passwordInput = document.getElementById("password-input");
-        const loginButton = document.getElementById("login-button");
-        const passwordProtectionDiv = document.getElementById("password-protection");
-        const notesAppDiv = document.getElementById("notes-app");
-        const notesTextarea = document.getElementById("notes-textarea");
-        const saveButton = document.getElementById("save-button");
-        const clearButton = document.getElementById("clear-button");
-        const logoutButton = document.getElementById("logout-button");
-        const passwordError = document.getElementById("password-error");
-        const saveStatus = document.getElementById("save-status");
+        // --- Configuration: Easily Edit These Values ---
 
-        // --- Cookie Functions ---
-        function setCookie(name, value, days) {
-            let expires = "";
-            if (days) {
-                let date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
-        }
+        // 1. Announcement Text (supports HTML for formatting)
+        const ANNOUNCEMENT_TEXT = `
+            <p class="text-lg font-semibold mb-2">Important Practice Update!</p>
+            <p>will get ur ass to practice</p>
+            <p class="text-sm text-gray-500 mt-4">Last updated: July 2, 2025</p>
+        `;
 
-        function getCookie(name) {
-            let nameEQ = name + "=";
-            let ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
-            }
-            return null;
-        }
+        // 2. Skipper Logs Data
+        // Each object has a 'name' and a 'skipped' boolean (true if skipped, false if not)
+        const SKIPPER_LOGS_DATA = [
+            { name: "Will", skipped: true },
+            { name: "Lincoln", skipped: false },
+            { name: "Jihong", skipped: true },
+            { name: "Ben", skipped: true },
+        ];
 
-        function eraseCookie(name) {
-            document.cookie = name + '=; Max-Age=-99999999; path=/; SameSite=Lax';
-        }
+        // --- End of Configuration ---
 
-        // --- Encryption/Decryption (Basic XOR for demonstration, not truly secure) ---
-        // For real security, consider a library like CryptoJS for AES encryption.
-        function simpleXOR(str, key) {
-            let output = "";
-            for (let i = 0; i < str.length; i++) {
-                let charCode = str.charCodeAt(i) ^ key.charCodeAt(i % key.length);
-                output += String.fromCharCode(charCode);
-            }
-            return output;
-        }
 
-        // --- App Logic ---
-        function showPasswordProtection() {
-            passwordProtectionDiv.classList.add("active");
-            notesAppDiv.classList.remove("active");
-            passwordInput.value = "";
-            passwordError.textContent = "";
-            notesTextarea.value = ""; // Clear notes on logout
-            saveStatus.textContent = "";
-        }
-
-        function showNotesApp() {
-            passwordProtectionDiv.classList.remove("active");
-            notesAppDiv.classList.add("active");
-            loadNotes();
-        }
-
-        function login() {
-            if (passwordInput.value === correctPassword) {
-                showNotesApp();
-            } else {
-                passwordError.textContent = "Incorrect password. Please try again.";
+        // Function to render the announcement
+        function renderAnnouncement() {
+            const announcementDiv = document.getElementById('announcement-content');
+            if (announcementDiv) {
+                announcementDiv.innerHTML = ANNOUNCEMENT_TEXT;
             }
         }
 
-        function saveNotes() {
-            const notes = notesTextarea.value;
-            const encryptedNotes = simpleXOR(notes, correctPassword); // Encrypt with the password
-            setCookie(cookieName, encryptedNotes, 365); // Save for 1 year
-            saveStatus.textContent = "Notes saved successfully!";
-            setTimeout(() => saveStatus.textContent = "", 3000); // Clear message after 3 seconds
-        }
+        // Function to render the skipper logs
+        function renderSkipperLogs() {
+            const skipperLogsList = document.getElementById('skipper-logs-list');
+            if (skipperLogsList) {
+                skipperLogsList.innerHTML = ''; // Clear existing content
+                SKIPPER_LOGS_DATA.forEach(log => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'skipper-log-item';
 
-        function loadNotes() {
-            const encryptedNotes = getCookie(cookieName);
-            if (encryptedNotes) {
-                notesTextarea.value = simpleXOR(encryptedNotes, correctPassword); // Decrypt with the password
-            } else {
-                notesTextarea.value = "";
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'skipper-name';
+                    nameSpan.textContent = log.name;
+
+                    const statusSpan = document.createElement('span');
+                    statusSpan.className = log.skipped ? 'skipper-status-yes' : 'skipper-status-no';
+                    statusSpan.textContent = log.skipped ? 'Yes' : 'No';
+
+                    itemDiv.appendChild(nameSpan);
+                    itemDiv.appendChild(statusSpan);
+                    skipperLogsList.appendChild(itemDiv);
+                });
             }
         }
-
-        function clearNotes() {
-            if (confirm("Are you sure you want to clear all notes? This cannot be undone.")) {
-                notesTextarea.value = "";
-                eraseCookie(cookieName);
-                saveStatus.textContent = "Notes cleared!";
-                setTimeout(() => saveStatus.textContent = "", 3000);
-            }
-        }
-
-        function logout() {
-            showPasswordProtection();
-        }
-
-        // --- Event Listeners ---
-        loginButton.addEventListener("click", login);
-        passwordInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                login();
-            }
-        });
-        saveButton.addEventListener("click", saveNotes);
-        clearButton.addEventListener("click", clearNotes);
-        logoutButton.addEventListener("click", logout);
-
-        // --- Initial Load ---
-        showPasswordProtection(); // Always start at the password screen
 
         // --- PWA Service Worker Registration ---
+        // This registers the service worker.
+        // You will need to save the content below into a file named `sw.js`
+        // in the same directory as this `index.html` file.
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
+                navigator.serviceWorker.register('/sw.js')
                     .then(registration => {
-                        console.log('Service Worker registered with scope:', registration.scope);
+                        console.log('Service Worker registered:', registration);
                     })
                     .catch(error => {
                         console.error('Service Worker registration failed:', error);
                     });
             });
         }
+
+        // --- PWA Manifest File Content ---
+        /*
+        // You will need to save the following JSON content into a file named `manifest.json`
+        // in the same directory as this `index.html` file.
+
+        {
+            "name": "Team Hub Announcements",
+            "short_name": "Team Hub",
+            "description": "Stay updated with team announcements and skipper logs.",
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": "#f0f4f8",
+            "theme_color": "#2196f3",
+            "icons": [
+                {
+                    "src": "/icons/icon-192x192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                },
+                {
+                    "src": "/icons/icon-512x512.png",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        }
+
+        // Note: For the icons, you'll need to create a folder named `icons` in your root directory
+        // and place `icon-192x192.png` and `icon-512x512.png` files there.
+        // You can use a tool like Favicon Generator to create these icons.
+        */
+
+        // --- Service Worker (sw.js) Content ---
+        /*
+        // You will need to save the following JavaScript content into a file named `sw.js`
+        // in the same directory as this `index.html` file.
+
+        const CACHE_NAME = 'team-hub-cache-v1';
+        const urlsToCache = [
+            '/',
+            '/index.html',
+            '/manifest.json',
+            'https://cdn.tailwindcss.com',
+            'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
+            'https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7W0Q5nw.woff2' // Example font file
+            // Add paths to your icons here if you create them, e.g., '/icons/icon-192x192.png'
+        ];
+
+        self.addEventListener('install', (event) => {
+            event.waitUntil(
+                caches.open(CACHE_NAME)
+                    .then((cache) => {
+                        console.log('Opened cache');
+                        return cache.addAll(urlsToCache);
+                    })
+            );
+        });
+
+        self.addEventListener('fetch', (event) => {
+            event.respondWith(
+                caches.match(event.request)
+                    .then((response) => {
+                        // Cache hit - return response
+                        if (response) {
+                            return response;
+                        }
+                        // No cache hit - fetch from network
+                        return fetch(event.request);
+                    })
+            );
+        });
+
+        self.addEventListener('activate', (event) => {
+            const cacheWhitelist = [CACHE_NAME];
+            event.waitUntil(
+                caches.keys().then((cacheNames) => {
+                    return Promise.all(
+                        cacheNames.map((cacheName) => {
+                            if (cacheWhitelist.indexOf(cacheName) === -1) {
+                                return caches.delete(cacheName);
+                            }
+                        })
+                    );
+                })
+            );
+        });
+        */
+
+        // Initial rendering when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAnnouncement();
+            renderSkipperLogs();
+        });
     </script>
-    
-    <link rel="manifest" href="manifest.json">
 </body>
 </html>
