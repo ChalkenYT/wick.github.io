@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>did will skip</title>
+    <title>Team Announcements & Daily Skipper Logs</title>
     <!-- Tailwind CSS CDN for easy styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts - Inter for a clean look -->
@@ -46,36 +46,56 @@
             border-radius: 8px;
             color: #1a202c;
         }
+        .day-section {
+            margin-bottom: 20px;
+            background-color: #f8fafc; /* Very light gray for day sections */
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .day-title {
+            font-weight: 700;
+            color: #334155; /* Darker gray for day titles */
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e2e8f0;
+        }
         .skipper-log-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0; /* Light gray separator */
+            padding: 8px 0;
+            border-bottom: 1px dashed #cbd5e1; /* Dashed separator for daily items */
         }
         .skipper-log-item:last-child {
             border-bottom: none;
         }
         .skipper-name {
-            font-weight: 600;
-            color: #2d3748;
+            font-weight: 500; /* Slightly less bold for names */
+            color: #475569;
         }
         .skipper-status-yes {
-            color: #ef4444; /* Red for 'Yes' (skipped) */
+            color: #dc2626; /* Red for 'Yes' (skipped) */
             font-weight: 600;
         }
         .skipper-status-no {
-            color: #22c55e; /* Green for 'No' (didn't skip) */
+            color: #16a34a; /* Darker green for 'No' (didn't skip) */
+            font-weight: 600;
+        }
+        .skipper-status-undetermined {
+            color: #f59e0b; /* Amber for 'Undetermined' */
             font-weight: 600;
         }
 
         /* Responsive adjustments */
         @media (max-width: 640px) {
             .container {
-                padding: 20px;
+                padding: 15px;
             }
             .section-title {
                 font-size: 1.5rem;
+            }
+            .day-title {
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -94,9 +114,9 @@
 
         <!-- Skipper Logs Section -->
         <div>
-            <h2 class="text-2xl section-title">Skipper Logs</h2>
+            <h2 class="text-2xl section-title">Daily Skipper Logs</h2>
             <div id="skipper-logs-list" class="bg-gray-50 p-4 rounded-lg">
-                <!-- Skipper logs will be loaded here by JavaScript -->
+                <!-- Skipper logs for each day will be loaded here by JavaScript -->
             </div>
         </div>
     </div>
@@ -107,18 +127,45 @@
         // 1. Announcement Text (supports HTML for formatting)
         const ANNOUNCEMENT_TEXT = `
             <p class="text-lg font-semibold mb-2">Important Practice Update!</p>
-            <p>hey will get ur ass to practice</p>
+            <p>Due to unexpected weather conditions, today's practice is cancelled. Please check your emails for further instructions regarding rescheduling. Stay safe!</p>
             <p class="text-sm text-gray-500 mt-4">Last updated: July 2, 2025</p>
         `;
 
         // 2. Skipper Logs Data
-        // Each object has a 'name' and a 'skipped' boolean (true if skipped, false if not)
-        const SKIPPER_LOGS_DATA = [
-            { name: "Will", skipped: true },
-            { name: "Lincoln", skipped: false },
-            { name: "Jihong", skipped: true },
-            { name: "Ben", skipped: true },
-        ];
+        // Structure: Object where keys are days of the week, and values are arrays
+        // Each array contains objects with 'name' and 'skipped' status (true, false, or "undetermined") for that day.
+        const SKIPPER_LOGS_DATA = {
+            "Monday": [
+                { name: "Will", skipped: "undetermined" },
+                { name: "Lincoln", skipped: "undetermined" },
+                { name: "Jihong", skipped: "undetermined" },
+                { name: "Ben", skipped: "undetermined" }
+            ],
+            "Tuesday": [
+                { name: "Will", skipped: "undetermined" },
+                { name: "Lincoln", skipped: "undetermined" },
+                { name: "Jihong", skipped: "undetermined" },
+                { name: "Ben", skipped: "undetermined" }
+            ],
+            "Wednesday": [
+                { name: "Will", skipped: true },    // Yes
+                { name: "Lincoln", skipped: false }, // No
+                { name: "Jihong", skipped: true },   // Yes
+                { name: "Ben", skipped: true }      // Yes
+            ],
+            "Thursday": [
+                { name: "Will", skipped: "undetermined" },
+                { name: "Lincoln", skipped: "undetermined" },
+                { name: "Jihong", skipped: "undetermined" },
+                { name: "Ben", skipped: "undetermined" }
+            ],
+            "Friday": [
+                { name: "Will", skipped: "undetermined" },
+                { name: "Lincoln", skipped: "undetermined" },
+                { name: "Jihong", skipped: "undetermined" },
+                { name: "Ben", skipped: "undetermined" }
+            ]
+        };
 
         // --- End of Configuration ---
 
@@ -136,22 +183,49 @@
             const skipperLogsList = document.getElementById('skipper-logs-list');
             if (skipperLogsList) {
                 skipperLogsList.innerHTML = ''; // Clear existing content
-                SKIPPER_LOGS_DATA.forEach(log => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'skipper-log-item';
 
-                    const nameSpan = document.createElement('span');
-                    nameSpan.className = 'skipper-name';
-                    nameSpan.textContent = log.name;
+                // Iterate through each day in the SKIPPER_LOGS_DATA
+                for (const day in SKIPPER_LOGS_DATA) {
+                    if (SKIPPER_LOGS_DATA.hasOwnProperty(day)) {
+                        const dayData = SKIPPER_LOGS_DATA[day];
 
-                    const statusSpan = document.createElement('span');
-                    statusSpan.className = log.skipped ? 'skipper-status-yes' : 'skipper-status-no';
-                    statusSpan.textContent = log.skipped ? 'Yes' : 'No';
+                        const daySectionDiv = document.createElement('div');
+                        daySectionDiv.className = 'day-section';
 
-                    itemDiv.appendChild(nameSpan);
-                    itemDiv.appendChild(statusSpan);
-                    skipperLogsList.appendChild(itemDiv);
-                });
+                        const dayTitle = document.createElement('h3');
+                        dayTitle.className = 'text-lg day-title';
+                        dayTitle.textContent = day;
+                        daySectionDiv.appendChild(dayTitle);
+
+                        // Iterate through each person for the current day
+                        dayData.forEach(log => {
+                            const itemDiv = document.createElement('div');
+                            itemDiv.className = 'skipper-log-item';
+
+                            const nameSpan = document.createElement('span');
+                            nameSpan.className = 'skipper-name';
+                            nameSpan.textContent = log.name;
+
+                            const statusSpan = document.createElement('span');
+                            // Determine the class and text based on the 'skipped' status
+                            if (log.skipped === true) {
+                                statusSpan.className = 'skipper-status-yes';
+                                statusSpan.textContent = 'Yes';
+                            } else if (log.skipped === false) {
+                                statusSpan.className = 'skipper-status-no';
+                                statusSpan.textContent = 'No';
+                            } else {
+                                statusSpan.className = 'skipper-status-undetermined';
+                                statusSpan.textContent = 'Undetermined';
+                            }
+
+                            itemDiv.appendChild(nameSpan);
+                            itemDiv.appendChild(statusSpan);
+                            daySectionDiv.appendChild(itemDiv);
+                        });
+                        skipperLogsList.appendChild(daySectionDiv);
+                    }
+                }
             }
         }
 
@@ -179,7 +253,7 @@
         {
             "name": "Team Hub Announcements",
             "short_name": "Team Hub",
-            "description": "Stay updated with team announcements and skipper logs.",
+            "description": "Stay updated with team announcements and daily skipper logs.",
             "start_url": "/",
             "display": "standalone",
             "background_color": "#f0f4f8",
